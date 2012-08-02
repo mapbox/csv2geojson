@@ -1,0 +1,9 @@
+{
+  "name": "csv2geojson",
+  "version": "0.0.0",
+  "description": "convert csv files to geojson",
+  "main": "index.js",
+  "bin": { "csv2geojson": "csv2geojson" },
+  "license": "BSD",
+  "preferGlobal": true
+}
