@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
 if (process.argv.length !== 3) return console.error('usage: csv2geojson FILE.csv');
-require('sys').puts(JSON.stringify(require('./index')(require('fs').readFileSync(process.argv[2], 'utf8'))));
+require('sys').puts(JSON.stringify(require('./index')(require('fs').readFileSync(process.argv[2], 'utf8')), null, 2));
