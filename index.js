@@ -80,7 +80,7 @@ function parse(x) {
         features: features
     };
     var parsed = csv_parse(x);
-    if (!parsed.length) return features;
+    if (!parsed.length) return featurecollection;
 
     var latfield = '',
         lonfield = '';
@@ -109,7 +109,7 @@ function parse(x) {
             });
         }
     }
-    return features;
+    return featurecollection;
 }
 
 if (typeof module !== undefined) module.exports = parse;
