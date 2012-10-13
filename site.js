@@ -35,7 +35,7 @@ $("#page").live('dragleave dragexit',function(event){
     $('#overlay').hide();
 });
 
-if (typeof(window.FileReader) == 'undefined') {
+if (typeof(window.FileReader) !== 'undefined') {
     $('#dragdrop-enabled').show();
 }
 
