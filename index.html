@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>csv2geojson</title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <style>
+            body {
+                margin:0 auto;
+                padding:0;
+                width:640px;
+                font:normal 13px/20px 'Helvetica';
+            }
+            textarea {
+                margin:10px 0;
+                height:200px;
+                width:640px;
+                font-family:monospace;
+            }
+            p {
+                margin:0;
+                padding:0;
+            }
+            #manual {
+                display:none;
+                padding:5px;
+                background:#f9fa99;
+            }
+            a#close {
+                text-decoration:none;
+                color:red;
+                float:right;
+                top:20px;
+                font-size:30px;
+            }
+            #overlay {
+                opacity:0.8;
+                position:absolute;
+                top:0;
+                right:0;
+                left:0;
+                bottom:0;
+                background:#f9fa99;
+                z-index:999;
+                display:none;
+            }
+            #overlay span {
+                font-size:80px;
+                display:block;
+                position:absolute;
+                top:50%;
+                left:0;
+                right:0;
+                text-align:center;
+            }
+            #dragdrop-enabled {
+                text-align:center;
+                font-style:italic;
+            }
+        </style>
+    </head>
+    <body dropzone="copy">
+        <h2>is that a csv you've got there? want a <a href='http://geojson.org/'>geojson</a>?</h2>
+        <div id='manual'>
+            <p>
+            Couldn't find the names of your latitude and longitude columns. Mind to specify them manually?
+            </p>
+        <label for='lon'>Longitude</label>
+        <select name='lon' id='lon'></select>
+        <label for='lat'>Latitude</label>
+        <select name='lat' id='lat'></select>
+        <a id='close' href='#'>&times;</a>
+        </div>
+
+        <textarea placeholder='copy and paste your csv file here. you have grown attached to it. do not worry - it will still be available on your computer, and likely in some kind of excel 1987 format too.' id='input'></textarea>
+        <!-- ha! a center element -->
+        <center><button id='go'>do it</button></center>
+                <textarea placeholder='your output will automagically appear here, and you will be filled with a sense of relief and accomplishment and yet at the same time yearn for the log cabin life. your dog would like to go to a log cabin too. so go, dog, go.' id='output'></textarea>
+        <div id='dragdrop-enabled'>nice browser you got there! you can even drag &amp; drop a csv file onto this page!</div>
+        <div id='overlay'><span>drop it!</span></div>
+        <script src='jquery.js'></script>
+        <script src='index.js'></script>
+        <script src='site.js'></script>
+    </body>
+</html>

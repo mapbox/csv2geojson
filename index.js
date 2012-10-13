@@ -1,4 +1,4 @@
-function parse(x) {
+function parse(x, lonfield, latfield) {
     // Extracted from d3
     function csv_parse(text) {
         var header;
@@ -82,16 +82,18 @@ function parse(x) {
     var parsed = csv_parse(x);
     if (!parsed.length) return featurecollection;
 
-    var latfield = '',
-        lonfield = '';
+    latfield = latfield || '';
+    lonfield = lonfield || '';
 
     for (var f in parsed[0]) {
-        if (f.match(/^Lat/i)) latfield = f;
-        if (f.match(/^Lon/i)) lonfield = f;
+        if (!latfield && f.match(/^Lat/i)) latfield = f;
+        if (!lonfield && f.match(/^Lon/i)) lonfield = f;
     }
 
     if (!latfield || !lonfield) {
-        throw 'CSV: Could not find latitude or longitude field';
+        var fields = [];
+        for (var k in parsed[0]) fields.push(k);
+        return fields;
     }
 
     for (var i = 0; i < parsed.length; i++) {
@@ -112,4 +114,4 @@ function parse(x) {
     return featurecollection;
 }
 
-if (typeof module !== undefined) module.exports = parse;
+if (typeof module !== 'undefined') module.exports = parse;
