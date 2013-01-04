@@ -27,7 +27,7 @@ function topolygon(gj) {
         }
     };
     for (var i = 0; i < features.length; i++) {
-        poly.geometry.coordinates.push(features[i].geometry.coordinates);
+        poly.geometry.coordinates[0].push(features[i].geometry.coordinates);
     }
     poly.properties = features[0].properties;
     return {
