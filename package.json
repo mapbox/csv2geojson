@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "convert csv files to geojson",
   "main": "index.js",
+  "repository": { "type": "git", "url": "https://github.com/tmcw/csv2geojson.git" },
   "bin": { "csv2geojson": "csv2geojson" },
   "license": "BSD",
   "preferGlobal": true
