@@ -1,4 +1,17 @@
 #!/usr/bin/env node
 
-if (process.argv.length !== 3) return console.error('usage: csv2geojson FILE.csv');
-require('sys').puts(JSON.stringify(require('./index')(require('fs').readFileSync(process.argv[2], 'utf8')), null, 2));
+var optimist = require('optimist'),
+    fs = require('fs'),
+    sys = require('sys'),
+    csv2geojson = require('./index'),
+    argv = optimist
+        .usage('Usage: $0 -lat [string] -lon [string] FILE')
+        .argv;
+
+if (!argv._.length) return optimist.showHelp();
+
+sys.puts(
+    JSON.stringify(
+        csv2geojson.csv2geojson(fs.readFileSync(argv._[0], 'utf8'),
+            argv.lat,
+            argv.lon), null, 2));
