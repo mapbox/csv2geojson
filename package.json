@@ -1,10 +1,22 @@
 {
   "name": "csv2geojson",
   "version": "0.0.1",
-  "description": "convert csv files to geojson",
+  "description": "convert CSV files to GeoJSON",
   "main": "index.js",
-  "repository": { "type": "git", "url": "https://github.com/tmcw/csv2geojson.git" },
-  "bin": { "csv2geojson": "csv2geojson" },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/tmcw/csv2geojson.git"
+  },
+  "scripts": {
+    "test": "mocha-phantomjs test/index.html"
+  },
+  "bin": {
+      "csv2geojson": "csv2geojson"
+  },
   "license": "BSD",
-  "preferGlobal": true
+  "devDependencies": {
+      "mocha": "~1.8",
+      "expect.js": "~0.2.0",
+      "mocha-phantomjs": "~1.1.1"
+  }
 }
