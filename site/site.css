@@ -1,0 +1,74 @@
+body {
+    margin:0 auto;
+    padding:0;
+    width:640px;
+    font:normal 13px/20px 'Helvetica';
+}
+
+#map {
+    width:640px;
+    height:300px;
+}
+
+textarea {
+    margin:10px 0;
+    height:100px;
+    width:640px;
+    font-family:monospace;
+}
+
+p {
+    margin:0;
+    padding:0;
+}
+
+#manual {
+    display:none;
+    padding:5px;
+    background:#f9fa99;
+}
+
+a#close {
+    text-decoration:none;
+    color:red;
+    float:right;
+    top:20px;
+    font-size:30px;
+}
+
+p.os {
+    text-align:center;
+}
+
+a {
+    font-size:90%;
+    color:blue;
+}
+
+#overlay {
+    opacity:0.8;
+    position:absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    background:#f9fa99;
+    z-index:999;
+    display:none;
+}
+
+#overlay span {
+    font-size:80px;
+    display:block;
+    position:absolute;
+    top:50%;
+    left:0;
+    right:0;
+    text-align:center;
+}
+
+#dragdrop-enabled {
+    text-align:center;
+    font-style:italic;
+    display:none;
+}
