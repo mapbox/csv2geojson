@@ -5,7 +5,6 @@ if (typeof require !== 'undefined') {
 
 describe('csv2geojson', function() {
     describe('#csv', function() {
-
         it('handles empty input', function() {
             expect(csv2geojson.csv('')).to.eql([]);
         });
@@ -13,6 +12,5 @@ describe('csv2geojson', function() {
         it('handles simple fields', function() {
             expect(csv2geojson.csv('a,b\n1,2')).to.eql([{a: '1', b: '2'}]);
         });
-
     });
 });
