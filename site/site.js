@@ -1,4 +1,4 @@
-var map = L.mapbox.map('map', 'examples.map-4l7djmvo')
+var map = L.mapbox.map('map', 'tmcw.map-ajwqaq7t')
     .setView([40, -74.50], 9);
 
 var $input = $('#input'),
