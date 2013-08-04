@@ -80,7 +80,8 @@ function csv2geojson(x, lonfield, latfield) {
             features: features
         };
 
-    var parsed = csv(x);
+    var parsed = (typeof x == 'string') ? csv(x) : x;
+
     if (!parsed.length) return featurecollection;
 
     latfield = latfield || '';
@@ -94,7 +95,11 @@ function csv2geojson(x, lonfield, latfield) {
     if (!latfield || !lonfield) {
         var fields = [];
         for (var k in parsed[0]) fields.push(k);
-        return fields;
+        return {
+            type: 'Error',
+            message: 'Latitude and longitude fields not present',
+            data: parsed
+        };
     }
 
     for (var i = 0; i < parsed.length; i++) {
@@ -156,7 +161,7 @@ function topolygon(gj) {
 
 module.exports = {
     csv: csv,
+    csv2geojson: csv2geojson,
     toline: toline,
-    topolygon: topolygon,
-    csv2geojson: csv2geojson
+    topolygon: topolygon
 };
