@@ -20,6 +20,8 @@
     "mocha-phantomjs": "~1.1.1"
   },
   "dependencies": {
-    "optimist": "~0.4.0"
+    "optimist": "~0.4.0",
+    "dsv": "0.0.2",
+    "brfs": "0.0.7"
   }
 }

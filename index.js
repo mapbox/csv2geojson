@@ -1,4 +1,4 @@
-var dsv = require('./dsv');
+var dsv = require('dsv');
 
 function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
 function isLon(f) { return !!f.match(/(L)(on|lng)(gitude)?/i); }
@@ -117,6 +117,6 @@ module.exports = {
     tsv: dsv.tsv.parse,
     dsv: dsv,
     csv2geojson: csv2geojson,
-    toLine: toline,
-    toPolygon: topolygon
+    toLine: toLine,
+    toPolygon: toPolygon
 };

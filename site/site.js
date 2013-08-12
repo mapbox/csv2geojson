@@ -61,7 +61,8 @@ if (typeof(window.FileReader) !== 'undefined') {
     $('#dragdrop-enabled').show();
 }
 
-$(window).on('drop', function(e) {
+$('#page').on('drop', function(e) {
+    console.log('here');
     e.stopPropagation();
     e.preventDefault();
     $('#overlay').hide();
