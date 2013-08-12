@@ -8,6 +8,16 @@ files into [GeoJSON](http://www.geojson.org/) data suitable for maps..
     npm install -g csv2geojson
     csv2geojson geodata.csv > geodata.geojson
 
+```
+➟ csv2geojson
+Usage: csv2geojson -lat [string] -lon [string] -delimeter [string] FILE
+
+Options:
+  --lat        the name of the latitude column
+  --lon        the name of the longitude column
+  --delimiter  the type of delimiter             [default: ","]
+```
+
 ## Using in nodejs
 
     npm install --save csv2geojson
