@@ -16,35 +16,37 @@ $('#close').click(function() {
 var gjLayer = null;
 
 $go.click(function() {
-    var geojson_content = csv2geojson.csv2geojson($input.val(),
-        $lon.val(), $lat.val());
-    if (geojson_content.features) {
-        if ($(this).data('type') === 'line') {
-            geojson_content = csv2geojson.toline(geojson_content);
+    csv2geojson.csv2geojson($input.val(), {
+        lonfield: $lon.val(),
+        latfield: $lat.val()
+    }, function(err, geojson_content) {
+        if (geojson_content.features) {
+            if ($(this).data('type') === 'line') {
+                geojson_content = csv2geojson.toline(geojson_content);
+            }
+            if ($(this).data('type') === 'polygon') {
+                geojson_content = csv2geojson.topolygon(geojson_content);
+            }
+            $output.val(JSON.stringify(geojson_content, null, 4));
+            if (gjLayer) {
+                map.removeLayer(gjLayer);
+                gjLayer = null;
+            }
+            gjLayer = L.geoJson(geojson_content.features);
+            map.addLayer(gjLayer);
+            map.fitBounds(gjLayer.getBounds());
+        } else {
+            $('#manual').show();
+            $lat.empty();
+            for (var i = 0; i < err.fields.length; i++) {
+                $('<option></option>')
+                    .appendTo($lon)
+                    .text(geojson_content[i])
+                    .attr('value', geojson_content[i]);
+            }
+            $lat.html($lon.html());
         }
-        if ($(this).data('type') === 'polygon') {
-            geojson_content = csv2geojson.topolygon(geojson_content);
-        }
-        $output.val(JSON.stringify(geojson_content, null, 4));
-        if (gjLayer) {
-            map.removeLayer(gjLayer);
-            gjLayer = null;
-        }
-        gjLayer = L.geoJson(geojson_content.features);
-        map.addLayer(gjLayer);
-        map.fitBounds(gjLayer.getBounds());
-    } else {
-        $('#manual').show();
-        $lat.empty();
-        for (var i = 0; i < geojson_content.length; i++) {
-            $('<option></option>')
-                .appendTo($lon)
-                .text(geojson_content[i])
-                .attr('value', geojson_content[i]);
-        }
-        $lat.html($lon.html());
-    }
-
+    });
 });
 
 $("*:visible").live('dragenter dragover', function(event) {

@@ -8,7 +8,7 @@
     "url": "https://github.com/tmcw/csv2geojson.git"
   },
   "scripts": {
-    "test": "mocha-phantomjs test/index.html"
+    "test": "mocha -R spec"
   },
   "bin": {
     "csv2geojson": "csv2geojson"
