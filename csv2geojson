@@ -3,15 +3,22 @@
 var optimist = require('optimist'),
     fs = require('fs'),
     sys = require('sys'),
-    csv2geojson = require('./index'),
+    csv2geojson = require('./'),
     argv = optimist
-        .usage('Usage: $0 -lat [string] -lon [string] FILE')
+        .usage('Usage: $0 -lat [string] -lon [string] -delimeter [string] FILE')
+        .describe('lat', 'the name of the latitude column')
+        .describe('lon', 'the name of the longitude column')
+        .describe('delimiter', 'the type of delimiter')
+        .default('delimiter', ',')
         .argv;
 
 if (!argv._.length) return optimist.showHelp();
 
-sys.puts(
-    JSON.stringify(
-        csv2geojson.csv2geojson(fs.readFileSync(argv._[0], 'utf8'),
-            argv.lat,
-            argv.lon), null, 2));
+csv2geojson.csv2geojson(fs.readFileSync(argv._[0], 'utf8'), {
+    latfield: argv.lat,
+    lonfield: argv.lon,
+    delimiter: argv.delimiter
+}, function(err, data) {
+    if (err) console.error(JSON.stringify(err, null, 2));
+    console.log(JSON.stringify(data, null, 2));
+});
