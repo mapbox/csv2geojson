@@ -92,8 +92,19 @@ function csv2geojson(x, options, callback) {
         if (parsed[i][lonfield] !== undefined &&
             parsed[i][lonfield] !== undefined) {
 
-            var lonf = parseFloat(parsed[i][lonfield]),
-                latf = parseFloat(parsed[i][latfield]);
+            var lonk = parsed[i][lonfield],
+                latk = parsed[i][latfield];
+
+            var a;
+            if (a = lonk.match(/^([0-9]+)[° ]*([0-9.]+)[' ]*([EW])?/)) {
+                lonk = (parseInt(a[1]) + parseFloat(a[2])/60) * ((a[3]=='W') ? -1 : 1);
+            }
+            if (a = latk.match(/^(\d+)[° ]*([0-9.]+)[' ]*([NS])?/)) {
+                latk = (parseInt(a[1]) + parseFloat(a[2])/60 )  * ((a[3]=='S') ? -1 : 1);
+            }
+
+            var lonf = parseFloat(lonk),
+                latf = parseFloat(latk);
 
             if (isNaN(lonf) ||
                 isNaN(latf)) {
@@ -108,8 +119,9 @@ function csv2geojson(x, options, callback) {
                     geometry: {
                         type: 'Point',
                         coordinates: [
-                            parseFloat(parsed[i][lonfield]),
-                            parseFloat(parsed[i][latfield])]
+                            parseFloat(lonf),
+                            parseFloat(latf)
+                        ]
                     }
                 });
             }
