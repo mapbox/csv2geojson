@@ -1,7 +1,7 @@
 var dsv = require('dsv');
 
 function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
-function isLon(f) { return !!f.match(/(L)(on|lng)(gitude)?/i); }
+function isLon(f) { return !!f.match(/(L)(on|ng)(gitude)?/i); }
 
 function keyCount(o) {
     return Object.keys(o).length;

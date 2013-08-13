@@ -55,6 +55,21 @@ describe('csv2geojson', function() {
             });
         });
 
+        it('with space before columns', function(done) {
+            csv2geojson.csv2geojson(textFile('space_column.csv'), function(err, data) {
+                expect(data).to.eql(jsonFile('simple_space.geojson'));
+                done();
+            });
+        });
+
+        it('with lng instead of lon', function(done) {
+            csv2geojson.csv2geojson(textFile('lng.csv'), function(err, data) {
+                console.log(JSON.stringify(err));
+                expect(data).to.eql(jsonFile('lng.geojson'));
+                done();
+            });
+        });
+
         describe('delimiters', function() {
             it('|', function(done) {
                 csv2geojson.csv2geojson(textFile('simple.pipe.dsv'), { delimiter: '|' },
