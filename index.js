@@ -34,6 +34,12 @@ function autoDelimiter(x) {
     }
 }
 
+function auto(x) {
+    var delimiter = autoDelimiter(x);
+    if (!delimiter) return null;
+    return dsv(delimiter).parse(x);
+}
+
 function csv2geojson(x, options, callback) {
 
     if (!callback) {
@@ -49,7 +55,7 @@ function csv2geojson(x, options, callback) {
     var features = [],
         featurecollection = { type: 'FeatureCollection', features: features };
 
-    if (options.delimiter === 'auto') {
+    if (options.delimiter === 'auto' && typeof x == 'string') {
         options.delimiter = autoDelimiter(x);
         if (!options.delimiter) return callback({
             type: 'Error',
@@ -155,6 +161,7 @@ module.exports = {
     csv: dsv.csv.parse,
     tsv: dsv.tsv.parse,
     dsv: dsv,
+    auto: auto,
     csv2geojson: csv2geojson,
     toLine: toLine,
     toPolygon: toPolygon

@@ -58,6 +58,12 @@ csv2geojson.dsv(delimiter).parse(dsvString);
 The [dsv](https://github.com/mbostock/dsv) library for barebones DSV parsing.
 
 ```js
+csv2geojson.auto(dsvString);
+```
+
+Automatically choose a delimiter to parse a dsv string with, and do it.
+
+```js
 csv2geojson.toPolygon(gj);
 csv2geojson.toLine(gj);
 ```

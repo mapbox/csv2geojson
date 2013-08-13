@@ -111,6 +111,25 @@ describe('csv2geojson', function() {
             });
         });
 
+        describe('#auto', function() {
+            ['simple.tsv', 'simple.semicolon.dsv', 'simple.csv', 'simple.pipe.dsv'].forEach(function(f) {
+                it('auto with ' + f, function() {
+                    expect(csv2geojson.auto(textFile(f))).to.eql(jsonFile('simple.json'));
+                });
+            });
+        });
+
+        describe('#auto->csv2geojson', function() {
+            ['simple.tsv', 'simple.semicolon.dsv', 'simple.csv', 'simple.pipe.dsv'].forEach(function(f) {
+                it('auto and then csv2 with ' + f, function(done) {
+                    csv2geojson.csv2geojson(csv2geojson.auto(textFile(f)), function(err, data) {
+                        expect(data).to.eql(jsonFile('simple.geojson'));
+                        done();
+                    });
+                });
+            });
+        });
+
         it('custom field names', function(done) {
             csv2geojson.csv2geojson('y|x|name\n1|2|3', {
                 delimiter: '|',
