@@ -93,14 +93,22 @@ function csv2geojson(x, options, callback) {
             parsed[i][lonfield] !== undefined) {
 
             var lonk = parsed[i][lonfield],
-                latk = parsed[i][latfield];
+                latk = parsed[i][latfield],
+                a;
 
-            var a;
-            if (a = lonk.match(/^([0-9]+)[° ]*([0-9.]+)[' ]*([EW])?/)) {
-                lonk = (parseInt(a[1]) + parseFloat(a[2])/60) * ((a[3]=='W') ? -1 : 1);
+            if (a = lonk.match(/^([0-9.]+)°? *(?:([0-9.]+)['’] *)?(?:([0-9.]+)(?:''|"|”) *)?([EW])?/)) {
+                lonk = ( parseFloat(a[1]) +
+                        (parseFloat(a[2])||0)/60 +
+                        (parseFloat(a[3])||0)/3600
+                       )
+                       * ((a[4]=='W') ? -1 : 1);
             }
-            if (a = latk.match(/^(\d+)[° ]*([0-9.]+)[' ]*([NS])?/)) {
-                latk = (parseInt(a[1]) + parseFloat(a[2])/60 )  * ((a[3]=='S') ? -1 : 1);
+            if (a = latk.match(/^([0-9.]+)°? *(?:([0-9.]+)['’] *)?(?:([0-9.]+)(?:''|"|”) *)?([NS])?/)) {
+                latk = ( parseFloat(a[1]) +
+                        (parseFloat(a[2])||0)/60 +
+                        (parseFloat(a[3])||0)/3600
+                       )
+                       * ((a[4]=='S') ? -1 : 1);
             }
 
             var lonf = parseFloat(lonk),
