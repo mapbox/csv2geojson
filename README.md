@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tmcw/csv2geojson.png)](https://travis-ci.org/tmcw/csv2geojson)
+
 # csv2geojson
 
 Converts [CSV](http://en.wikipedia.org/wiki/Comma-separated_values) and [TSV](http://en.wikipedia.org/wiki/Tab-separated_values)
