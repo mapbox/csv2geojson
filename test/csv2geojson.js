@@ -64,7 +64,6 @@ describe('csv2geojson', function() {
 
         it('with lng instead of lon', function(done) {
             csv2geojson.csv2geojson(textFile('lng.csv'), function(err, data) {
-                console.log(JSON.stringify(err));
                 expect(data).to.eql(jsonFile('lng.geojson'));
                 done();
             });
