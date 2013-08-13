@@ -1,0 +1,4 @@
+[{
+    "message": "A row contained an invalid value for latitude or longitude",
+    "row": { "lat": "foo", "lon": "2", "name": "3" }
+}]

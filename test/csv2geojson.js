@@ -1,6 +1,13 @@
-if (typeof require !== 'undefined') {
-    expect = require('expect.js');
-    csv2geojson = require('../');
+var expect = require('expect.js'),
+    csv2geojson = require('../'),
+    fs = require('fs');
+
+function textFile(f) {
+    return fs.readFileSync('./test/data/' + f, 'utf8');
+}
+
+function jsonFile(f) {
+    return JSON.parse(fs.readFileSync('./test/data/' + f, 'utf8'));
 }
 
 describe('csv2geojson', function() {
@@ -42,38 +49,51 @@ describe('csv2geojson', function() {
         });
 
         it('detects lat and lon', function(done) {
-            csv2geojson.csv2geojson('lat,lon,name\n1,2,3', function(err, data) {
-                expect(data).to.eql({
-                    type: 'FeatureCollection',
-                    features: [{
-                        type: 'Feature',
-                        properties: { name: '3', lat: '1', lon: '2' },
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [2, 1]
-                        }
-                    }]
-                });
+            csv2geojson.csv2geojson(textFile('simple.csv'), function(err, data) {
+                expect(data).to.eql(jsonFile('simple.geojson'));
                 done();
             });
         });
 
-        it('custom delimiter', function(done) {
-            csv2geojson.csv2geojson('lat|lon|name\n1|2|3', {
-                delimiter: '|'
-            }, function(err, data) {
-                expect(data).to.eql({
-                    type: 'FeatureCollection',
-                    features: [{
-                        type: 'Feature',
-                        properties: { name: '3', lat: '1', lon: '2' },
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [2, 1]
-                        }
-                    }]
+        describe('delimiters', function() {
+            it('|', function(done) {
+                csv2geojson.csv2geojson(textFile('simple.pipe.dsv'), { delimiter: '|' },
+                function(err, data) {
+                    expect(data).to.eql(jsonFile('simple.geojson'));
+                    done();
                 });
-                done();
+            });
+            it(',', function(done) {
+                csv2geojson.csv2geojson(textFile('simple.csv'), { delimiter: ',' },
+                function(err, data) {
+                    expect(data).to.eql(jsonFile('simple.geojson'));
+                    done();
+                });
+            });
+            it(';', function(done) {
+                csv2geojson.csv2geojson(textFile('simple.semicolon.dsv'), { delimiter: ';' },
+                function(err, data) {
+                    expect(data).to.eql(jsonFile('simple.geojson'));
+                    done();
+                });
+            });
+            it('tab', function(done) {
+                csv2geojson.csv2geojson(textFile('simple.tsv'), { delimiter: '\t' },
+                function(err, data) {
+                    expect(data).to.eql(jsonFile('simple.geojson'));
+                    done();
+                });
+            });
+            describe('auto', function() {
+                ['simple.tsv', 'simple.semicolon.dsv', 'simple.csv', 'simple.pipe.dsv'].forEach(function(f) {
+                    it('auto with ' + f, function(done) {
+                        csv2geojson.csv2geojson(textFile(f), { delimiter: 'auto' },
+                        function(err, data) {
+                            expect(data).to.eql(jsonFile('simple.geojson'));
+                            done();
+                        });
+                    });
+                });
             });
         });
 
@@ -99,31 +119,18 @@ describe('csv2geojson', function() {
         });
 
         it('accepts a parsed object', function() {
-            csv2geojson.csv2geojson(csv2geojson.csv('lat,lon,name\n1,2,3'), function(err, data) {
-                expect(data).to.eql({
-                    type: 'FeatureCollection',
-                    features: [{
-                        type: 'Feature',
-                        properties: { name: '3', lat: '1', lon: '2' },
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [2, 1]
-                        }
-                    }]
-                });
+            csv2geojson.csv2geojson(csv2geojson.csv(textFile('simple.csv')), function(err, data) {
+                expect(data).to.eql(jsonFile('simple.geojson'));
             });
         });
 
         it('reports bad coordinates', function() {
-            csv2geojson.csv2geojson(csv2geojson.csv('lat,lon,name\nfoo,2,3'), function(err, data) {
+            csv2geojson.csv2geojson(csv2geojson.csv(textFile('bad_coord.csv')), function(err, data) {
                 expect(data).to.eql({
                     type: 'FeatureCollection',
                     features: []
                 });
-                expect(err).to.eql([{
-                    message: 'A row contained an invalid value for latitude or longitude',
-                    row: { lat: 'foo', lon: '2', name: '3' }
-                }]);
+                expect(err).to.eql(jsonFile('bad_coord.error.json'));
             });
         });
 

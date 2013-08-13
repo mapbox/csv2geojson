@@ -3,6 +3,37 @@ var dsv = require('dsv');
 function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
 function isLon(f) { return !!f.match(/(L)(on|lng)(gitude)?/i); }
 
+function keyCount(o) {
+    return Object.keys(o).length;
+}
+
+function autoDelimiter(x) {
+    var delimiters = [',', ';', '\t', '|'];
+    var results = [];
+
+    delimiters.forEach(function(delimiter) {
+        var res = dsv(delimiter).parse(x);
+        if (res.length >= 1) {
+            var count = keyCount(res[0]);
+            for (var i = 0; i < res.length; i++) {
+                if (keyCount(res[i]) !== count) return;
+            }
+        }
+        results.push({
+            delimiter: delimiter,
+            arity: Object.keys(res[0]).length,
+        });
+    });
+
+    if (results.length) {
+        return results.sort(function(a, b) {
+            return b.arity - a.arity;
+        })[0].delimiter;
+    } else {
+        return null;
+    }
+}
+
 function csv2geojson(x, options, callback) {
 
     if (!callback) {
@@ -17,6 +48,14 @@ function csv2geojson(x, options, callback) {
 
     var features = [],
         featurecollection = { type: 'FeatureCollection', features: features };
+
+    if (options.delimiter === 'auto') {
+        options.delimiter = autoDelimiter(x);
+        if (!options.delimiter) return callback({
+            type: 'Error',
+            message: 'Could not autodetect delimiter'
+        });
+    }
 
     var parsed = (typeof x == 'string') ? dsv(options.delimiter).parse(x) : x;
 

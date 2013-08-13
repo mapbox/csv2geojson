@@ -5,6 +5,12 @@ var dsv = require('dsv');
 function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
 function isLon(f) { return !!f.match(/(L)(on|lng)(gitude)?/i); }
 
+function guess(x, options, callback) {
+    var delimiters = [',', ';', '\t', '|'];
+
+
+}
+
 function csv2geojson(x, options, callback) {
 
     if (!callback) {

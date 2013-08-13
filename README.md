@@ -47,6 +47,8 @@ Err is non-falsy if latitude and longitude values cannot be detected or if
 there are invalid rows in the file. Delimiter can be ',' for CSV or '\t' for
 TSV or '|' and other delimiters.
 
+Delimiter can also be `auto`, and it will try `, \t | ;` and choose the 'best'.
+
 ```js
 csv2geojson.dsv(delimiter).parse(dsvString);
 ```
