@@ -1,4 +1,5 @@
-var dsv = require('dsv');
+var dsv = require('dsv'),
+    sexagesimal = require('sexagesimal');
 
 function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
 function isLon(f) { return !!f.match(/(L)(on|ng)(gitude)?/i); }
@@ -90,8 +91,18 @@ function csv2geojson(x, options, callback) {
         if (parsed[i][lonfield] !== undefined &&
             parsed[i][lonfield] !== undefined) {
 
-            var lonf = parseFloat(parsed[i][lonfield]),
-                latf = parseFloat(parsed[i][latfield]);
+            var lonk = parsed[i][lonfield],
+                latk = parsed[i][latfield],
+                lonf, latf,
+                a;
+
+            a = sexagesimal(lonk, 'EW');
+            if (a) lonk = a;
+            a = sexagesimal(latk, 'NS');
+            if (a) latk = a;
+
+            lonf = parseFloat(lonk);
+            latf = parseFloat(latk);
 
             if (isNaN(lonf) ||
                 isNaN(latf)) {
@@ -106,8 +117,9 @@ function csv2geojson(x, options, callback) {
                     geometry: {
                         type: 'Point',
                         coordinates: [
-                            parseFloat(parsed[i][lonfield]),
-                            parseFloat(parsed[i][latfield])]
+                            parseFloat(lonf),
+                            parseFloat(latf)
+                        ]
                     }
                 });
             }

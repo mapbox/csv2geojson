@@ -38,6 +38,21 @@ describe('csv2geojson', function() {
         });
     });
 
+    describe('#sexagesimal', function() {
+        it('degrees', function(done) {
+            csv2geojson.csv2geojson(textFile('degrees.csv'), function(err, data) {
+                expect(data).to.eql(jsonFile('degrees.geojson'));
+                done();
+            });
+        });
+        it('minutes', function(done) {
+            csv2geojson.csv2geojson(textFile('minutes.csv'), function(err, data) {
+                expect(data).to.eql(jsonFile('minutes.geojson'));
+                done();
+            });
+        });
+    });
+
     describe('#csv2geojson', function() {
         it('handles empty input', function() {
             csv2geojson.csv2geojson('', function(err, data) {
