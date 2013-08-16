@@ -1,6 +1,6 @@
 {
   "name": "csv2geojson",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "convert CSV files to GeoJSON",
   "main": "index.js",
   "repository": {
@@ -23,6 +23,6 @@
     "optimist": "~0.4.0",
     "dsv": "0.0.2",
     "brfs": "0.0.7",
-    "sexagesimal": "0.0.1"
+    "sexagesimal": "0.1.0"
   }
 }
