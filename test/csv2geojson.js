@@ -84,6 +84,13 @@ describe('csv2geojson', function() {
             });
         });
 
+        it('with includeLatLon option', function(done) {
+            csv2geojson.csv2geojson(textFile('includeLatLon.csv'), { includeLatLon: true }, function(err, data) {
+                expect(data).to.eql(jsonFile('includeLatLon.geojson'));
+                done();
+            });
+        });
+
         describe('delimiters', function() {
             it('|', function(done) {
                 csv2geojson.csv2geojson(textFile('simple.pipe.dsv'), { delimiter: '|' },
@@ -155,7 +162,7 @@ describe('csv2geojson', function() {
                     type: 'FeatureCollection',
                     features: [{
                         type: 'Feature',
-                        properties: { name: '3', y: '1', x: '2' },
+                        properties: { name: '3' },
                         geometry: {
                             type: 'Point',
                             coordinates: [2, 1]
