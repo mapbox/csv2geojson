@@ -155,7 +155,7 @@ describe('csv2geojson', function() {
                     type: 'FeatureCollection',
                     features: [{
                         type: 'Feature',
-                        properties: { name: '3', y: '1', x: '2' },
+                        properties: { name: '3' },
                         geometry: {
                             type: 'Point',
                             coordinates: [2, 1]
