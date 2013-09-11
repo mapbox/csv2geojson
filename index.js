@@ -111,6 +111,11 @@ function csv2geojson(x, options, callback) {
                     row: parsed[i]
                 });
             } else {
+                if (!options.latLngProperties) {
+                    delete parsed[i][lonfield];
+                    delete parsed[i][latfield];
+                }
+
                 features.push({
                     type: 'Feature',
                     properties: parsed[i],
