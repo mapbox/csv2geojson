@@ -84,6 +84,13 @@ describe('csv2geojson', function() {
             });
         });
 
+        it('with latLngProperties option', function(done) {
+            csv2geojson.csv2geojson(textFile('latLngProperties.csv'), { latLngProperties: true }, function(err, data) {
+                expect(data).to.eql(jsonFile('latLngProperties.geojson'));
+                done();
+            });
+        });
+
         describe('delimiters', function() {
             it('|', function(done) {
                 csv2geojson.csv2geojson(textFile('simple.pipe.dsv'), { delimiter: '|' },
