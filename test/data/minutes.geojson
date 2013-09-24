@@ -1,1 +1,1 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"lat":"40° 11′","lon":"40° 11' 15\"","name":"Chester"},"geometry":{"type":"Point","coordinates":[40.1875,40.18333333333333]}}]}
+{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Chester"},"geometry":{"type":"Point","coordinates":[40.1875,40.18333333333333]}}]}

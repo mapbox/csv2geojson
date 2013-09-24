@@ -3,8 +3,6 @@
     "features": [{
         "type": "Feature",
         "properties": {
-            " lat": "1",
-            " lon": "2",
             " name": "3"
         },
         "geometry": {
