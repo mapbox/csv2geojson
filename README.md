@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tmcw/csv2geojson.png)](https://travis-ci.org/tmcw/csv2geojson)
+[![Build Status](https://travis-ci.org/mapbox/csv2geojson.png)](https://travis-ci.org/mapbox/csv2geojson)
 
 # csv2geojson
 
