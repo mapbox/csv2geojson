@@ -22,6 +22,7 @@
   "dependencies": {
     "optimist": "~0.4.0",
     "dsv": "0.0.3",
-    "sexagesimal": "0.1.0"
+    "sexagesimal": "0.1.0",
+    "concat-stream": "~1.0.1"
   }
 }
