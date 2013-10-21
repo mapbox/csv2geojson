@@ -130,6 +130,18 @@ describe('csv2geojson', function() {
                         });
                     });
                 });
+
+                it('no match', function(done) {
+                    csv2geojson.csv2geojson('', { delimiter: 'auto' },
+                    function(err, data) {
+                        expect(err).to.eql({
+                            type: 'Error',
+                            message: 'Could not autodetect delimiter'
+                        });
+                        expect(data).to.eql(undefined);
+                        done();
+                    });
+                });
             });
         });
 
@@ -138,6 +150,10 @@ describe('csv2geojson', function() {
                 it('auto with ' + f, function() {
                     expect(csv2geojson.auto(textFile(f))).to.eql(jsonFile('simple.json'));
                 });
+            });
+
+            it('no match', function() {
+                expect(csv2geojson.auto('')).to.eql(null);
             });
         });
 
@@ -148,6 +164,24 @@ describe('csv2geojson', function() {
                         expect(data).to.eql(jsonFile('simple.geojson'));
                         done();
                     });
+                });
+            });
+        });
+
+        describe('toLine', function() {
+            it('converts a list of points to a line', function(done) {
+                csv2geojson.csv2geojson(csv2geojson.auto(textFile('line.csv')), function(err, data) {
+                    expect(csv2geojson.toLine(data)).to.eql(jsonFile('line.geojson'));
+                    done();
+                });
+            });
+        });
+
+        describe('toPolygon', function() {
+            it('converts a list of points to a polygon', function(done) {
+                csv2geojson.csv2geojson(csv2geojson.auto(textFile('polygon.csv')), function(err, data) {
+                    expect(csv2geojson.toPolygon(data)).to.eql(jsonFile('polygon.geojson'));
+                    done();
                 });
             });
         });
