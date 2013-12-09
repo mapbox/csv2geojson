@@ -33,6 +33,10 @@ var geoJson = csv2geojson.csv2geojson(csvString, function(err, data) {
 });
 ```
 
+For usage with `browserify`, follow the same technique as for `node`, but remember
+to get [brfs](https://github.com/substack/brfs) as well so that dsv is correctly
+compiled.
+
 ## api
 
 ```js
