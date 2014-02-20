@@ -9,8 +9,10 @@ var optimist = require('optimist'),
         .usage('Usage: $0 -lat [string] -lon [string] -delimeter [string] FILE')
         .describe('lat', 'the name of the latitude column')
         .describe('lon', 'the name of the longitude column')
+        .describe('line', 'whether or not to output points as a LineString')
         .describe('delimiter', 'the type of delimiter')
         .default('delimiter', ',')
+        .default('line', false)
         .argv;
 
 if (process.stdin.isTTY && !argv._[0]) {
@@ -25,6 +27,7 @@ function convert(data) {
         delimiter: argv.delimiter
     }, function(err, data) {
         if (err) console.error(JSON.stringify(err, null, 2));
+        if (argv.line) data = csv2geojson.toLine(data)
         console.log(JSON.stringify(data, null, 2));
     });
 }
