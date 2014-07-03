@@ -1,4 +1,4 @@
-var expect = require('expect.js'),
+var test = require('tape'),
     csv2geojson = require('../'),
     fs = require('fs');
 
@@ -10,189 +10,197 @@ function jsonFile(f) {
     return JSON.parse(fs.readFileSync('./test/data/' + f, 'utf8'));
 }
 
-describe('csv2geojson', function() {
-    describe('#isLat', function() {
-        it('detects latitude fields', function() {
-            expect(csv2geojson.isLat('latitude')).to.eql(true);
-            expect(csv2geojson.isLat('lat')).to.eql(true);
-            expect(csv2geojson.isLat('Lat')).to.eql(true);
-            expect(csv2geojson.isLat('Latitude')).to.eql(true);
+test('csv2geojson', function(t) {
+    t.test('#isLat', function(t) {
+        t.test('detects latitude fields', function(t) {
+            t.deepEqual(csv2geojson.isLat('latitude'), true);
+            t.deepEqual(csv2geojson.isLat('lat'), true);
+            t.deepEqual(csv2geojson.isLat('Lat'), true);
+            t.deepEqual(csv2geojson.isLat('Latitude'), true);
+            t.end();
         });
-        it('prefixed and postfixed', function() {
-            expect(csv2geojson.isLat('is_lat')).to.eql(true);
-            expect(csv2geojson.isLat('is_lat_field')).to.eql(true);
+        t.test('prefixed and postfixed', function(t) {
+            t.deepEqual(csv2geojson.isLat('is_lat'), true);
+            t.deepEqual(csv2geojson.isLat('is_lat_field'), true);
+            t.end();
         });
-        it('does not accept false positives', function() {
-            expect(csv2geojson.isLat('nothingoftheabove')).to.eql(false);
-            expect(csv2geojson.isLat('some other thing')).to.eql(false);
-        });
-    });
-
-    describe('#csv', function() {
-        it('handles empty input', function() {
-            expect(csv2geojson.csv('')).to.eql([]);
-        });
-
-        it('handles simple fields', function() {
-            expect(csv2geojson.csv('a,b\n1,2')).to.eql([{a: '1', b: '2'}]);
+        t.test('does not accept false positives', function(t) {
+            t.deepEqual(csv2geojson.isLat('nothingoftheabove'), false);
+            t.deepEqual(csv2geojson.isLat('some other thing'), false);
+            t.end();
         });
     });
 
-    describe('#sexagesimal', function() {
-        it('degrees', function(done) {
+    t.test('#csv', function(t) {
+        t.test('handles empty input', function(t) {
+            t.deepEqual(csv2geojson.csv(''), []);
+            t.end();
+        });
+
+        t.test('handles simple fields', function(t) {
+            t.deepEqual(csv2geojson.csv('a,b\n1,2'), [{a: '1', b: '2'}]);
+            t.end();
+        });
+    });
+
+    t.test('#sexagesimal', function(t) {
+        t.test('degrees', function(t) {
             csv2geojson.csv2geojson(textFile('degrees.csv'), function(err, data) {
-                expect(data).to.eql(jsonFile('degrees.geojson'));
-                done();
+                t.deepEqual(data, jsonFile('degrees.geojson'));
+                t.end();
             });
         });
-        it('minutes', function(done) {
+        t.test('minutes', function(t) {
             csv2geojson.csv2geojson(textFile('minutes.csv'), function(err, data) {
-                expect(data).to.eql(jsonFile('minutes.geojson'));
-                done();
+                t.deepEqual(data, jsonFile('minutes.geojson'));
+                t.end();
             });
         });
     });
 
-    describe('#csv2geojson', function() {
-        it('handles empty input', function() {
+    t.test('#csv2geojson', function(t) {
+        t.test('handles empty input', function(t) {
             csv2geojson.csv2geojson('', function(err, data) {
-                expect(data).to.eql({
+                t.deepEqual(data, {
                     type: 'FeatureCollection',
                     features: []
                 });
+                t.end();
             });
         });
 
-        it('detects lat and lon', function(done) {
+        t.test('detects lat and lon', function(t) {
             csv2geojson.csv2geojson(textFile('simple.csv'), function(err, data) {
-                expect(data).to.eql(jsonFile('simple.geojson'));
-                done();
+                t.deepEqual(data, jsonFile('simple.geojson'));
+                t.end();
             });
         });
 
-        it('with space before columns', function(done) {
+        t.test('with space before columns', function(t) {
             csv2geojson.csv2geojson(textFile('space_column.csv'), function(err, data) {
-                expect(data).to.eql(jsonFile('simple_space.geojson'));
-                done();
+                t.deepEqual(data, jsonFile('simple_space.geojson'));
+                t.end();
             });
         });
 
-        it('with lng instead of lon', function(done) {
+        t.test('with lng instead of lon', function(t) {
             csv2geojson.csv2geojson(textFile('lng.csv'), function(err, data) {
-                expect(data).to.eql(jsonFile('lng.geojson'));
-                done();
+                t.deepEqual(data, jsonFile('lng.geojson'));
+                t.end();
             });
         });
 
-        it('with includeLatLon option', function(done) {
+        t.test('with includeLatLon option', function(t) {
             csv2geojson.csv2geojson(textFile('includeLatLon.csv'), { includeLatLon: true }, function(err, data) {
-                expect(data).to.eql(jsonFile('includeLatLon.geojson'));
-                done();
+                t.deepEqual(data, jsonFile('includeLatLon.geojson'));
+                t.end();
             });
         });
 
-        describe('delimiters', function() {
-            it('|', function(done) {
+        t.test('delimiters', function(t) {
+            t.test('|', function(t) {
                 csv2geojson.csv2geojson(textFile('simple.pipe.dsv'), { delimiter: '|' },
                 function(err, data) {
-                    expect(data).to.eql(jsonFile('simple.geojson'));
-                    done();
+                    t.deepEqual(data, jsonFile('simple.geojson'));
+                    t.end();
                 });
             });
-            it(',', function(done) {
+            t.test(',', function(t) {
                 csv2geojson.csv2geojson(textFile('simple.csv'), { delimiter: ',' },
                 function(err, data) {
-                    expect(data).to.eql(jsonFile('simple.geojson'));
-                    done();
+                    t.deepEqual(data, jsonFile('simple.geojson'));
+                    t.end();
                 });
             });
-            it(';', function(done) {
+            t.test(';', function(t) {
                 csv2geojson.csv2geojson(textFile('simple.semicolon.dsv'), { delimiter: ';' },
                 function(err, data) {
-                    expect(data).to.eql(jsonFile('simple.geojson'));
-                    done();
+                    t.deepEqual(data, jsonFile('simple.geojson'));
+                    t.end();
                 });
             });
-            it('tab', function(done) {
+            t.test('tab', function(t) {
                 csv2geojson.csv2geojson(textFile('simple.tsv'), { delimiter: '\t' },
                 function(err, data) {
-                    expect(data).to.eql(jsonFile('simple.geojson'));
-                    done();
+                    t.deepEqual(data, jsonFile('simple.geojson'));
+                    t.end();
                 });
             });
-            describe('auto', function() {
+            t.test('auto', function(t) {
                 ['simple.tsv', 'simple.semicolon.dsv', 'simple.csv', 'simple.pipe.dsv'].forEach(function(f) {
-                    it('auto with ' + f, function(done) {
+                    t.test('auto with ' + f, function(t) {
                         csv2geojson.csv2geojson(textFile(f), { delimiter: 'auto' },
                         function(err, data) {
-                            expect(data).to.eql(jsonFile('simple.geojson'));
-                            done();
+                            t.deepEqual(data, jsonFile('simple.geojson'));
+                            t.end();
                         });
                     });
                 });
 
-                it('no match', function(done) {
+                t.test('no match', function(t) {
                     csv2geojson.csv2geojson('', { delimiter: 'auto' },
                     function(err, data) {
-                        expect(err).to.eql({
+                        t.deepEqual(err, {
                             type: 'Error',
                             message: 'Could not autodetect delimiter'
                         });
-                        expect(data).to.eql(undefined);
-                        done();
+                        t.deepEqual(data, undefined);
+                        t.end();
                     });
                 });
             });
         });
 
-        describe('#auto', function() {
+        t.test('#auto', function(t) {
             ['simple.tsv', 'simple.semicolon.dsv', 'simple.csv', 'simple.pipe.dsv'].forEach(function(f) {
-                it('auto with ' + f, function() {
-                    expect(csv2geojson.auto(textFile(f))).to.eql(jsonFile('simple.json'));
+                t.test('auto with ' + f, function(t) {
+                    t.deepEqual(csv2geojson.auto(textFile(f)), jsonFile('simple.json'));
+                    t.end();
                 });
             });
 
-            it('no match', function() {
-                expect(csv2geojson.auto('')).to.eql(null);
+            t.test('no match', function(t) {
+                t.deepEqual(csv2geojson.auto(''), null);
+                t.end();
             });
         });
 
-        describe('#auto->csv2geojson', function() {
+        t.test('#auto->csv2geojson', function(t) {
             ['simple.tsv', 'simple.semicolon.dsv', 'simple.csv', 'simple.pipe.dsv'].forEach(function(f) {
-                it('auto and then csv2 with ' + f, function(done) {
+                t.test('auto and then csv2 with ' + f, function(t) {
                     csv2geojson.csv2geojson(csv2geojson.auto(textFile(f)), function(err, data) {
-                        expect(data).to.eql(jsonFile('simple.geojson'));
-                        done();
+                        t.deepEqual(data, jsonFile('simple.geojson'));
+                        t.end();
                     });
                 });
             });
         });
 
-        describe('toLine', function() {
-            it('converts a list of points to a line', function(done) {
+        t.test('toLine', function(t) {
+            t.test('converts a list of points to a line', function(t) {
                 csv2geojson.csv2geojson(csv2geojson.auto(textFile('line.csv')), function(err, data) {
-                    expect(csv2geojson.toLine(data)).to.eql(jsonFile('line.geojson'));
-                    done();
+                    t.deepEqual(csv2geojson.toLine(data), jsonFile('line.geojson'));
+                    t.end();
                 });
             });
         });
 
-        describe('toPolygon', function() {
-            it('converts a list of points to a polygon', function(done) {
+        t.test('toPolygon', function(t) {
+            t.test('converts a list of points to a polygon', function(t) {
                 csv2geojson.csv2geojson(csv2geojson.auto(textFile('polygon.csv')), function(err, data) {
-                    expect(csv2geojson.toPolygon(data)).to.eql(jsonFile('polygon.geojson'));
-                    done();
+                    t.deepEqual(csv2geojson.toPolygon(data), jsonFile('polygon.geojson'));
+                    t.end();
                 });
             });
         });
 
-        it('custom field names', function(done) {
+        t.test('custom field names', function(t) {
             csv2geojson.csv2geojson('y|x|name\n1|2|3', {
                 delimiter: '|',
                 latfield: 'y',
                 lonfield: 'x'
             }, function(err, data) {
-                expect(data).to.eql({
+                t.deepEqual(data, {
                     type: 'FeatureCollection',
                     features: [{
                         type: 'Feature',
@@ -203,34 +211,37 @@ describe('csv2geojson', function() {
                         }
                     }]
                 });
-                done();
+                t.end();
             });
         });
 
-        it('accepts a parsed object', function() {
+        t.test('accepts a parsed object', function(t) {
             csv2geojson.csv2geojson(csv2geojson.csv(textFile('simple.csv')), function(err, data) {
-                expect(data).to.eql(jsonFile('simple.geojson'));
+                t.deepEqual(data, jsonFile('simple.geojson'));
+                t.end();
             });
         });
 
-        it('reports bad coordinates', function() {
+        t.test('reports bad coordinates', function(t) {
             csv2geojson.csv2geojson(csv2geojson.csv(textFile('bad_coord.csv')), function(err, data) {
-                expect(data).to.eql({
+                t.deepEqual(data, {
                     type: 'FeatureCollection',
                     features: []
                 });
-                expect(err).to.eql(jsonFile('bad_coord.error.json'));
+                t.deepEqual(err, jsonFile('bad_coord.error.json'));
+                t.end();
             });
         });
 
-        it('returns an error on not finding fields', function() {
+        t.test('returns an error on not finding fields', function(t) {
             csv2geojson.csv2geojson(csv2geojson.csv('name\nfoo'), function(err, data) {
-                expect(err).to.eql({
+                t.deepEqual(err, {
                     type: 'Error',
                     message: 'Latitude and longitude fields not present',
                     data: [{name:'foo'}],
                     fields: ['name']
                 });
+                t.end();
             });
         });
     });

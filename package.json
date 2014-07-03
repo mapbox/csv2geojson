@@ -8,16 +8,18 @@
     "url": "https://github.com/mapbox/csv2geojson.git"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "tape test/*.js",
+    "coverage": "istanbul cover test/*.js && coveralls < ./coverage/lcov.info"
   },
   "bin": {
     "csv2geojson": "csv2geojson"
   },
   "license": "BSD",
   "devDependencies": {
-    "mocha": "~1.8",
-    "expect.js": "~0.2.0",
-    "mocha-phantomjs": "~1.1.1"
+    "mocha-phantomjs": "~1.1.1",
+    "tape": "~2.13.3",
+    "coveralls": "~2.10.1",
+    "istanbul": "~0.2.14"
   },
   "dependencies": {
     "optimist": "~0.4.0",
