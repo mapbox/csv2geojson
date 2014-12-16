@@ -96,6 +96,9 @@ function csv2geojson(x, options, callback) {
                 lonf, latf,
                 a;
 
+            lonk = lonk.replace(',', '.');
+            latk = latk.replace(',', '.');
+
             a = sexagesimal(lonk, 'EW');
             if (a) lonk = a;
             a = sexagesimal(latk, 'NS');
