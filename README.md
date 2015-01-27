@@ -12,12 +12,13 @@ files into [GeoJSON](http://www.geojson.org/) data suitable for maps..
 
 ```
 ➟ csv2geojson
-Usage: csv2geojson -lat [string] -lon [string] -delimiter [string] FILE
+Usage: csv2geojson -lat [string] -lon [string] -delimiter [string] -crs [string] FILE
 
 Options:
   --lat        the name of the latitude column
   --lon        the name of the longitude column
   --delimiter  the type of delimiter             [default: ","]
+  --crs        the Coordinate Reference System(CRS) of the coordinates in the GeoJSON
 ```
 
 ## Using in nodejs
