@@ -53,14 +53,13 @@ function csv2geojson(x, options, callback) {
     var latfield = options.latfield || '',
         lonfield = options.lonfield || '',
         crs = options.crs || '';
-        
-    var CRS = [];
-	if (crs !='') {
-		CRS = { type: 'name', properties: { name: crs } };
-	}
 
     var features = [],
-        featurecollection = { type: 'FeatureCollection', features: features, crs: CRS };
+        featurecollection = { type: 'FeatureCollection', features: features };
+
+    if (crs !== '') {
+        featurecollection.crs = { type: 'name', properties: { name: crs } };
+    }
 
     if (options.delimiter === 'auto' && typeof x == 'string') {
         options.delimiter = autoDelimiter(x);

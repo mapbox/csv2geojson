@@ -70,6 +70,15 @@ describe('csv2geojson', function() {
             });
         });
 
+        it('supports crs option', function(done) {
+            csv2geojson.csv2geojson(textFile('simple.csv'), {
+                crs: 'WGS84'
+            }, function(err, data) {
+                expect(data).to.eql(jsonFile('simple-wgs84.geojson'));
+                done();
+            });
+        });
+
         it('with space before columns', function(done) {
             csv2geojson.csv2geojson(textFile('space_column.csv'), function(err, data) {
                 expect(data).to.eql(jsonFile('simple_space.geojson'));

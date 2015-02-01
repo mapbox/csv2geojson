@@ -18,7 +18,8 @@ Options:
   --lat        the name of the latitude column
   --lon        the name of the longitude column
   --delimiter  the type of delimiter             [default: ","]
-  --crs        the Coordinate Reference System(CRS) of the coordinates in the GeoJSON
+  --crs        the Coordinate Reference System (CRS) of the
+               coordinates in the GeoJSON
 ```
 
 ## Using in nodejs
