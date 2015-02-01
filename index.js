@@ -51,10 +51,16 @@ function csv2geojson(x, options, callback) {
     options.delimiter = options.delimiter || ',';
 
     var latfield = options.latfield || '',
-        lonfield = options.lonfield || '';
+        lonfield = options.lonfield || '',
+        crs = options.crs || '';
+        
+    var CRS = [];
+	if (crs !='') {
+		CRS = { type: 'name', properties: { name: crs } };
+	}
 
     var features = [],
-        featurecollection = { type: 'FeatureCollection', features: features };
+        featurecollection = { type: 'FeatureCollection', features: features, crs: CRS };
 
     if (options.delimiter === 'auto' && typeof x == 'string') {
         options.delimiter = autoDelimiter(x);
