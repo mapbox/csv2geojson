@@ -3,7 +3,10 @@
     "features": [{
         "type": "Feature",
         "properties": {
-            "name": "3"
+            "name": [
+            "5",
+            "6",
+            "7"]
         },
         "geometry": {
             "type": "Polygon",
