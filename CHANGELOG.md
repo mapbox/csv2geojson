@@ -1,3 +1,7 @@
+## 4.0.0
+
+* [toLine and toPolygon now include all properties of all aggregated objects.](https://github.com/mapbox/csv2geojson/pull/29)
+
 ## 3.8.0
 
 * `--crs` option in `csv2geojson` and in csv2geojson() to specify a specific
