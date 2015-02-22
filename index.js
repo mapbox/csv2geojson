@@ -151,7 +151,15 @@ function toLine(gj) {
     for (var i = 0; i < features.length; i++) {
         line.geometry.coordinates.push(features[i].geometry.coordinates);
     }
-    line.properties = features[0].properties;
+    line.properties = features.reduce(function(aggregatedProperties, newFeature) {
+      for (var key in newFeature.properties) {
+        if (!aggregatedProperties[key]) {
+          aggregatedProperties[key] = [];
+        }
+        aggregatedProperties[key].push(newFeature.properties[key]);
+      }
+      return aggregatedProperties;
+    }, {});
     return {
         type: 'FeatureCollection',
         features: [line]
@@ -170,7 +178,15 @@ function toPolygon(gj) {
     for (var i = 0; i < features.length; i++) {
         poly.geometry.coordinates[0].push(features[i].geometry.coordinates);
     }
-    poly.properties = features[0].properties;
+    poly.properties = features.reduce(function(aggregatedProperties, newFeature) {
+      for (var key in newFeature.properties) {
+        if (!aggregatedProperties[key]) {
+          aggregatedProperties[key] = [];
+        }
+        aggregatedProperties[key].push(newFeature.properties[key]);
+      }
+      return aggregatedProperties;
+    }, {});
     return {
         type: 'FeatureCollection',
         features: [poly]
