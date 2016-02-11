@@ -1,3 +1,7 @@
+## 5.0.0
+
+* Updates `dsv` dependency to `d3-dsv`
+
 ## 4.0.0
 
 * [toLine and toPolygon now include all properties of all aggregated objects.](https://github.com/mapbox/csv2geojson/pull/29)
