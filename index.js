@@ -1,4 +1,4 @@
-var dsv = require('dsv'),
+var dsv = require('d3-dsv'),
     sexagesimal = require('sexagesimal');
 
 function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
@@ -13,7 +13,7 @@ function autoDelimiter(x) {
     var results = [];
 
     delimiters.forEach(function(delimiter) {
-        var res = dsv(delimiter).parse(x);
+        var res = dsv.dsv(delimiter).parse(x);
         if (res.length >= 1) {
             var count = keyCount(res[0]);
             for (var i = 0; i < res.length; i++) {
@@ -35,10 +35,21 @@ function autoDelimiter(x) {
     }
 }
 
+/**
+ * Silly stopgap for dsv to d3-dsv upgrade
+ *
+ * @param {Array} x dsv output
+ * @returns {Array} array without columns member
+ */
+function deleteColumns(x) {
+    delete x.columns;
+    return x;
+}
+
 function auto(x) {
     var delimiter = autoDelimiter(x);
     if (!delimiter) return null;
-    return dsv(delimiter).parse(x);
+    return deleteColumns(dsv.dsv(delimiter).parse(x));
 }
 
 function csv2geojson(x, options, callback) {
@@ -69,7 +80,8 @@ function csv2geojson(x, options, callback) {
         });
     }
 
-    var parsed = (typeof x == 'string') ? dsv(options.delimiter).parse(x) : x;
+    var parsed = (typeof x == 'string') ? 
+        dsv.dsv(options.delimiter).parse(x) : x;
 
     if (!parsed.length) return callback(null, featurecollection);
 
@@ -84,7 +96,7 @@ function csv2geojson(x, options, callback) {
             return callback({
                 type: 'Error',
                 message: 'Latitude and longitude fields not present',
-                data: parsed,
+                data: deleteColumns(parsed),
                 fields: fields
             });
         }
@@ -196,8 +208,8 @@ function toPolygon(gj) {
 module.exports = {
     isLon: isLon,
     isLat: isLat,
-    csv: dsv.csv.parse,
-    tsv: dsv.tsv.parse,
+    csv: dsv.csvParse,
+    tsv: dsv.tsvParse,
     dsv: dsv,
     auto: auto,
     csv2geojson: csv2geojson,

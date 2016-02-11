@@ -28,16 +28,6 @@ describe('csv2geojson', function() {
         });
     });
 
-    describe('#csv', function() {
-        it('handles empty input', function() {
-            expect(csv2geojson.csv('')).to.eql([]);
-        });
-
-        it('handles simple fields', function() {
-            expect(csv2geojson.csv('a,b\n1,2')).to.eql([{a: '1', b: '2'}]);
-        });
-    });
-
     describe('#sexagesimal', function() {
         it('degrees', function(done) {
             csv2geojson.csv2geojson(textFile('degrees.csv'), function(err, data) {
@@ -217,13 +207,13 @@ describe('csv2geojson', function() {
         });
 
         it('accepts a parsed object', function() {
-            csv2geojson.csv2geojson(csv2geojson.csv(textFile('simple.csv')), function(err, data) {
+            csv2geojson.csv2geojson(textFile('simple.csv'), function(err, data) {
                 expect(data).to.eql(jsonFile('simple.geojson'));
             });
         });
 
         it('reports bad coordinates', function() {
-            csv2geojson.csv2geojson(csv2geojson.csv(textFile('bad_coord.csv')), function(err, data) {
+            csv2geojson.csv2geojson(textFile('bad_coord.csv'), function(err, data) {
                 expect(data).to.eql({
                     type: 'FeatureCollection',
                     features: []
@@ -233,7 +223,7 @@ describe('csv2geojson', function() {
         });
 
         it('returns an error on not finding fields', function() {
-            csv2geojson.csv2geojson(csv2geojson.csv('name\nfoo'), function(err, data) {
+            csv2geojson.csv2geojson('name\nfoo', function(err, data) {
                 expect(err).to.eql({
                     type: 'Error',
                     message: 'Latitude and longitude fields not present',
