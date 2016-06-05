@@ -49,10 +49,11 @@ csv2geojson.csv2geojson(csvString, {
 });
 ```
 
-Parse a CSV file and derive a [GeoJSON](http://www.geojson.org/) object from it.
-Err is non-falsy if latitude and longitude values cannot be detected or if
-there are invalid rows in the file. Delimiter can be ',' for CSV or '\t' for
-TSV or '|' and other delimiters.
+Parse a CSV file and derive a [GeoJSON](http://www.geojson.org/) 
+[`FeatureCollection`](http://geojson.org/geojson-spec.html#feature-collection-objects)
+object from it. Err is non-falsy if latitude and longitude values cannot be 
+detected or if there are invalid rows in the file. Delimiter can be ',' 
+for CSV or '\t' for TSV or '|' and other delimiters.
 
 Delimiter can also be `auto`, and it will try `, \t | ;` and choose the 'best'.
 
