@@ -1,0 +1,10 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "properties": {
+            "name": "foo"
+        },
+        "geometry": null
+    }]
+}
