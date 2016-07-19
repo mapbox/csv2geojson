@@ -85,24 +85,30 @@ function csv2geojson(x, options, callback) {
 
     if (!parsed.length) return callback(null, featurecollection);
 
+    var errors = [];
+
+    var noGeometry = false;
+
     if (!latfield || !lonfield) {
         for (var f in parsed[0]) {
             if (!latfield && isLat(f)) latfield = f;
             if (!lonfield && isLon(f)) lonfield = f;
         }
         if (!latfield || !lonfield) {
-            var fields = [];
-            for (var k in parsed[0]) fields.push(k);
-            return callback({
-                type: 'Error',
-                message: 'Latitude and longitude fields not present',
-                data: deleteColumns(parsed),
-                fields: fields
-            });
+            noGeometry = true;
         }
     }
 
-    var errors = [];
+    if (noGeometry) {
+      for (var i = 0; i < parsed.length; i++) {
+        features.push({
+            type: 'Feature',
+            properties: parsed[i],
+            geometry: null
+        });
+      }
+      callback(errors.length ? errors: null, featurecollection);
+    }
 
     for (var i = 0; i < parsed.length; i++) {
         if (parsed[i][lonfield] !== undefined &&

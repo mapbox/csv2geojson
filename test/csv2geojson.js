@@ -223,14 +223,9 @@ describe('csv2geojson', function() {
         });
 
         it('returns an error on not finding fields', function() {
-            csv2geojson.csv2geojson('name\nfoo', function(err, data) {
-                expect(err).to.eql({
-                    type: 'Error',
-                    message: 'Latitude and longitude fields not present',
-                    data: [{name:'foo'}],
-                    fields: ['name']
-                });
-            });
+          csv2geojson.csv2geojson(textFile('geometry_null.csv'), function(err, data) {
+              expect(data).to.eql(jsonFile('geometry_null.geojson'));
+          });
         });
     });
 });
