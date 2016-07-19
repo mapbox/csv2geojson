@@ -2,7 +2,6 @@
 
 var optimist = require('optimist'),
     fs = require('fs'),
-    sys = require('sys'),
     concat = require('concat-stream'),
     csv2geojson = require('./'),
     argv = optimist
