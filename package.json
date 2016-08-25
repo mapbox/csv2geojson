@@ -14,7 +14,7 @@
   "bin": {
     "csv2geojson": "csv2geojson"
   },
-  "license": "BSD",
+  "license": "MIT",
   "devDependencies": {
     "browserify": "^8.1.3",
     "expect.js": "~0.2.0",
