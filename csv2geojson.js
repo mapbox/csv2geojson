@@ -114,7 +114,8 @@ function csv2geojson(x, options, callback) {
                 isNaN(latf)) {
                 errors.push({
                     message: 'A row contained an invalid value for latitude or longitude',
-                    row: parsed[i]
+                    row: parsed[i],
+                    index: i
                 });
             } else {
                 if (!options.includeLatLon) {
