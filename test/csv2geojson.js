@@ -31,6 +31,26 @@ describe('csv2geojson', function () {
         });
     });
 
+    describe('#guessHeader', function () {
+
+        it('detects best longitude match', function () {
+            expect(csv2geojson.guessLonHeader({'this is a long header': 'xx', 'longitude': 'yy'})).to.eql('longitude');
+            expect(csv2geojson.guessLonHeader({'this is a long header': 'xx', 'lon': 'yy'})).to.eql('lon');
+            expect(csv2geojson.guessLonHeader({'lon': 'yy'})).to.eql('lon');
+            expect(csv2geojson.guessLonHeader({'lng': 'yy'})).to.eql('lng');
+            expect(csv2geojson.guessLonHeader({'LONGITUDE': 'yy'})).to.eql('LONGITUDE');
+        });
+
+        it('detects best latitude match', function () {
+            expect(csv2geojson.guessLatHeader({'platinium': 'xx', 'point latitude': 'yy'})).to.eql('point latitude');
+            expect(csv2geojson.guessLatHeader({'lat': 'xx'})).to.eql('lat');
+            expect(csv2geojson.guessLatHeader({'Lat': 'xx'})).to.eql('Lat');
+            expect(csv2geojson.guessLatHeader({'Latitude': 'xx'})).to.eql('Latitude');
+            expect(csv2geojson.guessLatHeader({'LATITUDE': 'xx'})).to.eql('LATITUDE');
+        });
+
+    });
+
     describe('#sexagesimal', function () {
         it('degrees', function (done) {
             csv2geojson.csv2geojson(textFile('degrees.csv'), function (err, data) {
