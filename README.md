@@ -34,10 +34,6 @@ var geoJson = csv2geojson.csv2geojson(csvString, function(err, data) {
 });
 ```
 
-For usage with `browserify`, follow the same technique as for `node`, but remember
-to get [brfs](https://github.com/substack/brfs) as well so that dsv is correctly
-compiled.
-
 ## api
 
 ```js
@@ -79,11 +75,13 @@ or line that has the coordinates of those points, in the order given.
 
 ## Using in webpages
 
-    wget https://raw.github.com/tmcw/csv2geojson/gh-pages/csv2geojson.js
+The latest build will be at
+
+    https://npmcdn.com/csv2geojson@latest/csv2geojson.js
+
+Open that path in a browser to be redirected to the lastest pinned version.
 
 Looks for fields like `/^Lat/i`.
-
-Includes part of [d3js](http://d3js.org/) for CSV parsing.
 
 ## See Also
 
