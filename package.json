@@ -8,7 +8,7 @@
     "url": "https://github.com/mapbox/csv2geojson.git"
   },
   "scripts": {
-    "test": "mocha -R spec",
+    "test": "eslint index.js && mocha -R spec",
     "build": "browserify -s csv2geojson index.js > csv2geojson.js"
   },
   "bin": {
@@ -16,15 +16,17 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^8.1.3",
-    "expect.js": "~0.2.0",
-    "mocha": "~1.8",
-    "mocha-phantomjs": "~1.1.1"
+    "browserify": "^13.1.0",
+    "eslint": "3.4.0",
+    "eslint-config-mourner": "2.0.1",
+    "expect.js": "~0.3.1",
+    "mocha": "~3.0",
+    "mocha-phantomjs": "~4.1.0"
   },
   "dependencies": {
     "optimist": "~0.6.1",
-    "d3-dsv": "0.2.0",
-    "sexagesimal": "0.4.0",
-    "concat-stream": "~1.0.1"
+    "d3-dsv": "1.0.1",
+    "sexagesimal": "0.5.0",
+    "concat-stream": "~1.5.1"
   }
 }

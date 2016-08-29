@@ -1,3 +1,5 @@
+'use strict';
+
 var dsv = require('d3-dsv'),
     sexagesimal = require('sexagesimal');
 
@@ -12,8 +14,8 @@ function autoDelimiter(x) {
     var delimiters = [',', ';', '\t', '|'];
     var results = [];
 
-    delimiters.forEach(function(delimiter) {
-        var res = dsv.dsv(delimiter).parse(x);
+    delimiters.forEach(function (delimiter) {
+        var res = dsv.dsvFormat(delimiter).parse(x);
         if (res.length >= 1) {
             var count = keyCount(res[0]);
             for (var i = 0; i < res.length; i++) {
@@ -27,7 +29,7 @@ function autoDelimiter(x) {
     });
 
     if (results.length) {
-        return results.sort(function(a, b) {
+        return results.sort(function (a, b) {
             return b.arity - a.arity;
         })[0].delimiter;
     } else {
@@ -49,7 +51,7 @@ function deleteColumns(x) {
 function auto(x) {
     var delimiter = autoDelimiter(x);
     if (!delimiter) return null;
-    return deleteColumns(dsv.dsv(delimiter).parse(x));
+    return deleteColumns(dsv.dsvFormat(delimiter).parse(x));
 }
 
 function csv2geojson(x, options, callback) {
@@ -66,26 +68,33 @@ function csv2geojson(x, options, callback) {
         crs = options.crs || '';
 
     var features = [],
-        featurecollection = { type: 'FeatureCollection', features: features };
+        featurecollection = {type: 'FeatureCollection', features: features};
 
     if (crs !== '') {
-        featurecollection.crs = { type: 'name', properties: { name: crs } };
+        featurecollection.crs = {type: 'name', properties: {name: crs}};
     }
 
     if (options.delimiter === 'auto' && typeof x == 'string') {
         options.delimiter = autoDelimiter(x);
-        if (!options.delimiter) return callback({
-            type: 'Error',
-            message: 'Could not autodetect delimiter'
-        });
+        if (!options.delimiter) {
+            callback({
+                type: 'Error',
+                message: 'Could not autodetect delimiter'
+            });
+            return;
+        }
     }
 
-    var parsed = (typeof x == 'string') ? 
-        dsv.dsv(options.delimiter).parse(x) : x;
+    var parsed = (typeof x == 'string') ?
+        dsv.dsvFormat(options.delimiter).parse(x) : x;
 
-    if (!parsed.length) return callback(null, featurecollection);
+    if (!parsed.length) {
+        callback(null, featurecollection);
+        return;
+    }
 
     var errors = [];
+    var i;
 
     var noGeometry = false;
 
@@ -100,17 +109,18 @@ function csv2geojson(x, options, callback) {
     }
 
     if (noGeometry) {
-      for (var i = 0; i < parsed.length; i++) {
-        features.push({
-            type: 'Feature',
-            properties: parsed[i],
-            geometry: null
-        });
-      }
-      callback(errors.length ? errors: null, featurecollection);
+        for (i = 0; i < parsed.length; i++) {
+            features.push({
+                type: 'Feature',
+                properties: parsed[i],
+                geometry: null
+            });
+        }
+        callback(errors.length ? errors : null, featurecollection);
+        return;
     }
 
-    for (var i = 0; i < parsed.length; i++) {
+    for (i = 0; i < parsed.length; i++) {
         if (parsed[i][lonfield] !== undefined &&
             parsed[i][latfield] !== undefined) {
 
@@ -155,7 +165,7 @@ function csv2geojson(x, options, callback) {
         }
     }
 
-    callback(errors.length ? errors: null, featurecollection);
+    callback(errors.length ? errors : null, featurecollection);
 }
 
 function toLine(gj) {
@@ -170,14 +180,14 @@ function toLine(gj) {
     for (var i = 0; i < features.length; i++) {
         line.geometry.coordinates.push(features[i].geometry.coordinates);
     }
-    line.properties = features.reduce(function(aggregatedProperties, newFeature) {
-      for (var key in newFeature.properties) {
-        if (!aggregatedProperties[key]) {
-          aggregatedProperties[key] = [];
+    line.properties = features.reduce(function (aggregatedProperties, newFeature) {
+        for (var key in newFeature.properties) {
+            if (!aggregatedProperties[key]) {
+                aggregatedProperties[key] = [];
+            }
+            aggregatedProperties[key].push(newFeature.properties[key]);
         }
-        aggregatedProperties[key].push(newFeature.properties[key]);
-      }
-      return aggregatedProperties;
+        return aggregatedProperties;
     }, {});
     return {
         type: 'FeatureCollection',
@@ -197,14 +207,14 @@ function toPolygon(gj) {
     for (var i = 0; i < features.length; i++) {
         poly.geometry.coordinates[0].push(features[i].geometry.coordinates);
     }
-    poly.properties = features.reduce(function(aggregatedProperties, newFeature) {
-      for (var key in newFeature.properties) {
-        if (!aggregatedProperties[key]) {
-          aggregatedProperties[key] = [];
+    poly.properties = features.reduce(function (aggregatedProperties, newFeature) {
+        for (var key in newFeature.properties) {
+            if (!aggregatedProperties[key]) {
+                aggregatedProperties[key] = [];
+            }
+            aggregatedProperties[key].push(newFeature.properties[key]);
         }
-        aggregatedProperties[key].push(newFeature.properties[key]);
-      }
-      return aggregatedProperties;
+        return aggregatedProperties;
     }, {});
     return {
         type: 'FeatureCollection',
