@@ -9,8 +9,12 @@
   },
   "scripts": {
     "test": "eslint index.js && mocha -R spec",
-    "build": "browserify -s csv2geojson index.js > csv2geojson.js"
+    "prepublish": "browserify -s csv2geojson index.js > csv2geojson.js"
   },
+  "files": [
+    "csv2geojson.js",
+    "index.js"
+  ],
   "bin": {
     "csv2geojson": "csv2geojson"
   },
