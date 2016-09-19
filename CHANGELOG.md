@@ -1,3 +1,7 @@
+## 5.0.1
+
+* Improved heuristic for guessing headers (thanks Yohan) https://github.com/mapbox/csv2geojson/issues/46
+
 ## 5.0.0
 
 * Updates `dsv` dependency to `d3-dsv`
