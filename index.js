@@ -3,8 +3,26 @@
 var dsv = require('d3-dsv'),
     sexagesimal = require('sexagesimal');
 
-function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
-function isLon(f) { return !!f.match(/(L)(on|ng)(gitude)?/i); }
+var latRegex = /(Lat)(itude)?/gi,
+    lonRegex = /(L)(on|ng)(gitude)?/i;
+
+function guessHeader(row, regexp) {
+    var name, match, score;
+    for (var f in row) {
+        match = f.match(regexp);
+        if (match && (!name || match[0].length / f.length > score)) {
+            score = match[0].length / f.length;
+            name = f;
+        }
+    }
+    return name;
+}
+
+function guessLatHeader(row) { return guessHeader(row, latRegex); }
+function guessLonHeader(row) { return guessHeader(row, lonRegex); }
+
+function isLat(f) { return !!f.match(latRegex); }
+function isLon(f) { return !!f.match(lonRegex); }
 
 function keyCount(o) {
     return (typeof o == 'object') ? Object.keys(o).length : 0;
@@ -96,17 +114,10 @@ function csv2geojson(x, options, callback) {
     var errors = [];
     var i;
 
-    var noGeometry = false;
 
-    if (!latfield || !lonfield) {
-        for (var f in parsed[0]) {
-            if (!latfield && isLat(f)) latfield = f;
-            if (!lonfield && isLon(f)) lonfield = f;
-        }
-        if (!latfield || !lonfield) {
-            noGeometry = true;
-        }
-    }
+    if (!latfield) latfield = guessLatHeader(parsed[0]);
+    if (!lonfield) lonfield = guessLonHeader(parsed[0]);
+    var noGeometry = (!latfield || !lonfield);
 
     if (noGeometry) {
         for (i = 0; i < parsed.length; i++) {
@@ -225,6 +236,8 @@ function toPolygon(gj) {
 module.exports = {
     isLon: isLon,
     isLat: isLat,
+    guessLatHeader: guessLatHeader,
+    guessLonHeader: guessLonHeader,
     csv: dsv.csvParse,
     tsv: dsv.tsvParse,
     dsv: dsv,
