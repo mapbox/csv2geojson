@@ -13,6 +13,7 @@
   },
   "files": [
     "csv2geojson.js",
+    "csv2geojson",
     "index.js"
   ],
   "bin": {
