@@ -1,6 +1,6 @@
 {
   "name": "csv2geojson",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "convert CSV files to GeoJSON",
   "main": "index.js",
   "repository": {
@@ -31,7 +31,7 @@
   "dependencies": {
     "optimist": "~0.6.1",
     "d3-dsv": "1.0.1",
-    "sexagesimal": "0.5.0",
+    "@mapbox/sexagesimal": "0.5.0",
     "concat-stream": "~1.5.1"
   }
 }
