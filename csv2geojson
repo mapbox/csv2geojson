@@ -10,6 +10,7 @@ var optimist = require('optimist'),
         .describe('lon', 'the name of the longitude column')
         .describe('line', 'whether or not to output points as a LineString')
         .describe('delimiter', 'the type of delimiter')
+        .describe('numeric-fields', 'comma separated list of fields to convert to numbers')
         .default('delimiter', ',')
         .default('line', false)
         .argv;
@@ -24,6 +25,7 @@ function convert(data) {
         latfield: argv.lat,
         lonfield: argv.lon,
         delimiter: argv.delimiter
+        nemericFields: argv['numeric-fields']
     }, function(err, data) {
         if (err) console.error(JSON.stringify(err, null, 2));
         if (argv.line) data = csv2geojson.toLine(data)

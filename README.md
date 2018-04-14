@@ -19,6 +19,7 @@ Options:
   --lon        the name of the longitude column
   --line       whether or not to output points as a LineString  [default: false]
   --delimiter  the type of delimiter                            [default: ","]
+  --numeric-fields comma separated list of fields to convert to numbers
 ```
 
 ## Using in nodejs

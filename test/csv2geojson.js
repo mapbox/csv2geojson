@@ -235,6 +235,14 @@ describe('csv2geojson', function () {
             });
         });
 
+        it('converts numeric fields', function () {
+            csv2geojson.csv2geojson(textFile('simple.csv'), {
+                numericFields: 'name'
+            }, function (err, data) {
+                expect(data).to.eql(jsonFile('number.geojson'));
+            });
+        });
+
         it('reports bad coordinates', function () {
             csv2geojson.csv2geojson(textFile('bad_coord.csv'), function (err, data) {
                 expect(data).to.eql({
