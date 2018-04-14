@@ -1,7 +1,7 @@
 'use strict';
 
 var dsv = require('d3-dsv'),
-    sexagesimal = require('sexagesimal');
+    sexagesimal = require('@mapbox/sexagesimal');
 
 var latRegex = /(Lat)(itude)?/gi,
     lonRegex = /(L)(on|ng)(gitude)?/i;
