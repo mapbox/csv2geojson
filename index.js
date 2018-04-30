@@ -103,8 +103,19 @@ function csv2geojson(x, options, callback) {
         }
     }
 
+    var numericFields = options.numericFields ? options.numericFields.split(',') : null;
+
     var parsed = (typeof x == 'string') ?
-        dsv.dsvFormat(options.delimiter).parse(x) : x;
+        dsv.dsvFormat(options.delimiter).parse(x, function (d) {
+            if (numericFields) {
+                for (var key in d) {
+                    if (key in numericFields) {
+                        d[key] = +d[key];
+                    }
+                }
+            }
+            return d;
+        }) : x;
 
     if (!parsed.length) {
         callback(null, featurecollection);
