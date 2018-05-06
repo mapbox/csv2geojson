@@ -1,6 +1,6 @@
 {
   "name": "csv2geojson",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "description": "convert CSV files to GeoJSON",
   "main": "index.js",
   "repository": {
