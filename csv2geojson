@@ -24,8 +24,8 @@ function convert(data) {
     csv2geojson.csv2geojson(data.toString(), {
         latfield: argv.lat,
         lonfield: argv.lon,
-        delimiter: argv.delimiter
-        nemericFields: argv['numeric-fields']
+        delimiter: argv.delimiter,
+        numericFields: argv['numeric-fields']
     }, function(err, data) {
         if (err) console.error(JSON.stringify(err, null, 2));
         if (argv.line) data = csv2geojson.toLine(data)
