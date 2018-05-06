@@ -109,7 +109,7 @@ function csv2geojson(x, options, callback) {
         dsv.dsvFormat(options.delimiter).parse(x, function (d) {
             if (numericFields) {
                 for (var key in d) {
-                    if (key in numericFields) {
+                    if (numericFields.includes(key)) {
                         d[key] = +d[key];
                     }
                 }
