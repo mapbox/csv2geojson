@@ -33,5 +33,8 @@
     "d3-dsv": "1.0.1",
     "@mapbox/sexagesimal": "^1.1.0",
     "concat-stream": "~1.5.1"
+  },
+  "engines": {
+      "node": ">=6"
   }
 }
