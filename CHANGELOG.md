@@ -1,3 +1,7 @@
+## 5.1.1
+
+* Fix bug in `--numeric-fields` option
+
 ## 5.1.0
 
 * add `--numeric-fields` option
