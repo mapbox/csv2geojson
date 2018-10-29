@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mapbox/csv2geojson.png)](https://travis-ci.org/mapbox/csv2geojson)
+﻿[![Build Status](https://travis-ci.org/mapbox/csv2geojson.png)](https://travis-ci.org/mapbox/csv2geojson)
 
 # csv2geojson
 
@@ -12,7 +12,7 @@ files into [GeoJSON](http://www.geojson.org/) data suitable for maps..
 
 ```
 ➟ csv2geojson
-Usage: csv2geojson --lat [string] --lon [string] --line [boolean] --delimiter [string] FILE
+Usage: csv2geojson --lat [string] --lon [string] --line [boolean] --delimiter [string] --prettyPrintSpaces [int] FILE
 
 Options:
   --lat        the name of the latitude column
@@ -20,6 +20,7 @@ Options:
   --line       whether or not to output points as a LineString  [default: false]
   --delimiter  the type of delimiter                            [default: ","]
   --numeric-fields comma separated list of fields to convert to numbers
+  --prettyPrintSpaces the number of spaces to use for pretty printing JSON
 ```
 
 ## Using in nodejs

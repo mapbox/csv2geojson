@@ -11,8 +11,10 @@ var optimist = require('optimist'),
         .describe('line', 'whether or not to output points as a LineString')
         .describe('delimiter', 'the type of delimiter')
         .describe('numeric-fields', 'comma separated list of fields to convert to numbers')
+        .describe('prettyPrintSpaces', 'number of spaces to use for pretty print')
         .default('delimiter', ',')
         .default('line', false)
+        .default('prettyPrintSpaces', 2)
         .argv;
 
 if (process.stdin.isTTY && !argv._[0]) {
@@ -27,8 +29,8 @@ function convert(data) {
         delimiter: argv.delimiter,
         numericFields: argv['numeric-fields']
     }, function(err, data) {
-        if (err) console.error(JSON.stringify(err, null, 2));
+        if (err) console.error(JSON.stringify(err, null, argv.prettyPrintSpaces));
         if (argv.line) data = csv2geojson.toLine(data)
-        console.log(JSON.stringify(data, null, 2));
+        console.log(JSON.stringify(data, null, argv.prettyPrintSpaces));
     });
 }
