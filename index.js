@@ -56,40 +56,38 @@ function autoDelimiter(x) {
 
 /**
  * @function formatDsvOutput
- * @param {Array} x dsv output
+ * @param {Array} dsvArray dsv output
  * @returns {Array} array without columns member and each element has the proper column name
  */
 
-function formatDsvOutput(x) {
-    return deleteColumns(addColumnName(x));
+function formatDsvOutput(dsvArray) {
+    return deleteFirstRow(mapToObject(dsvArray));
 }
 
 /**
- * @function addColumnName
- * @param {Array} x dsv output
+ * @function mapToObject
+ * @param {Array} dsvArray dsv output
  * @returns {Array} array with each element has the proper column name
  */
 
-function addColumnName(x) {
-    return x.map((v) => {
-        const newV = {};
-        for (let index = 0; index < x[0].length; index++) {
-            const column = x[0][index];
-            newV[`${column}`] = v[index];
-        }
-        return newV;
+function mapToObject(dsvArray) {
+    return dsvArray.map((row) => {
+        return row.reduce((resultObject, cv, index) => {
+            const column = dsvArray[0][index];
+            const object = {[`${column}`]: cv};
+            return Object.assign({}, resultObject, object);
+        }, {});
     });
 }
 
 /**
- * Silly stopgap for dsv to d3-dsv upgrade
- *
- * @param {Array} x dsv output
+ * @function deleteFirstRow
+ * @param {Array} dsvArray dsv output
  * @returns {Array} array without columns member(x[0] from parseRows)
  */
 
-function deleteColumns(x) {
-    return x.splice(1, x.length);
+function deleteFirstRow(dsvArray) {
+    return dsvArray.slice(1, dsvArray.length);
 }
 
 function auto(x) {
