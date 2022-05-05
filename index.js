@@ -33,7 +33,7 @@ function autoDelimiter(x) {
     var results = [];
 
     delimiters.forEach(function (delimiter) {
-        var res = dsv.dsvFormat(delimiter).parse(x);
+        var res = dsv.dsvFormat(delimiter).parseRows(x);
         if (res.length >= 1) {
             var count = keyCount(res[0]);
             for (var i = 0; i < res.length; i++) {
@@ -45,7 +45,6 @@ function autoDelimiter(x) {
             });
         }
     });
-
     if (results.length) {
         return results.sort(function (a, b) {
             return b.arity - a.arity;
@@ -56,20 +55,47 @@ function autoDelimiter(x) {
 }
 
 /**
+ * @function formatDsvOutput
+ * @param {Array} x dsv output
+ * @returns {Array} array without columns member and each element has the proper column name
+ */
+
+function formatDsvOutput(x) {
+    return deleteColumns(addColumnName(x));
+}
+
+/**
+ * @function addColumnName
+ * @param {Array} x dsv output
+ * @returns {Array} array with each element has the proper column name
+ */
+
+function addColumnName(x) {
+    return x.map((v) => {
+        const newV = {};
+        for (let index = 0; index < x[0].length; index++) {
+            const column = x[0][index];
+            newV[`${column}`] = v[index];
+        }
+        return newV;
+    });
+}
+
+/**
  * Silly stopgap for dsv to d3-dsv upgrade
  *
  * @param {Array} x dsv output
- * @returns {Array} array without columns member
+ * @returns {Array} array without columns member(x[0] from parseRows)
  */
+
 function deleteColumns(x) {
-    delete x.columns;
-    return x;
+    return x.splice(1, x.length);
 }
 
 function auto(x) {
     var delimiter = autoDelimiter(x);
     if (!delimiter) return null;
-    return deleteColumns(dsv.dsvFormat(delimiter).parse(x));
+    return formatDsvOutput((dsv.dsvFormat(delimiter).parseRows(x)));
 }
 
 function csv2geojson(x, options, callback) {
@@ -102,11 +128,9 @@ function csv2geojson(x, options, callback) {
             return;
         }
     }
-
     var numericFields = options.numericFields ? options.numericFields.split(',') : null;
-
     var parsed = (typeof x == 'string') ?
-        dsv.dsvFormat(options.delimiter).parse(x, function (d) {
+        formatDsvOutput((dsv.dsvFormat(options.delimiter).parseRows(x, function (d) {
             if (numericFields) {
                 for (var key in d) {
                     if (numericFields.includes(key)) {
@@ -115,8 +139,7 @@ function csv2geojson(x, options, callback) {
                 }
             }
             return d;
-        }) : x;
-
+        }))) : x;
     if (!parsed.length) {
         callback(null, featurecollection);
         return;
