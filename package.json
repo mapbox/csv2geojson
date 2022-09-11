@@ -29,7 +29,7 @@
     "mocha-phantomjs": "~4.1.0"
   },
   "dependencies": {
-    "optimist": "~0.6.1",
+    "meow": "^9.0.0",
     "d3-dsv": "1.0.1",
     "@mapbox/sexagesimal": "^1.1.0",
     "concat-stream": "~1.5.1"
