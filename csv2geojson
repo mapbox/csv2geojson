@@ -1,34 +1,49 @@
 #!/usr/bin/env node
+'use strict';
 
-var optimist = require('optimist'),
-    fs = require('fs'),
-    concat = require('concat-stream'),
-    csv2geojson = require('./'),
-    argv = optimist
-        .usage('Usage: $0 --lat [string] --lon [string] --delimiter [string] FILE')
-        .describe('lat', 'the name of the latitude column')
-        .describe('lon', 'the name of the longitude column')
-        .describe('line', 'whether or not to output points as a LineString')
-        .describe('delimiter', 'the type of delimiter')
-        .describe('numeric-fields', 'comma separated list of fields to convert to numbers')
-        .default('delimiter', ',')
-        .default('line', false)
-        .argv;
+const meow = require('meow');
+const fs = require('fs');
+const concat = require('concat-stream');
+const csv2geojson = require('./');
 
-if (process.stdin.isTTY && !argv._[0]) {
-    return optimist.showHelp();
-}
-(argv._.length ? fs.createReadStream(argv._[0]) : process.stdin).pipe(concat(convert));
+const cli = meow(
+    `
+Usage: ./csv2geojson --lat [string] --lon [string] --delimiter [string] FILE
+
+Options:
+  --lat             the name of the latitude column
+  --lon             the name of the longitude column
+  --line            whether or not to output points as a LineString       [default: false]
+  --delimiter       the type of delimiter                                 [default: ","]
+  --numeric-fields  comma separated list of fields to convert to numbers
+`,
+    {
+        flags: {
+            lat: {type: 'string'},
+            lon: {type: 'string'},
+            line: {type: 'boolean', default: false},
+            delimiter: {type: 'string', default: ','},
+            numericFields: {type: 'string'},
+        },
+    }
+);
+
+const file = cli.input[0];
+const {lat, lon, delimiter, numericFields, line} = cli.flags;
+
+if (process.stdin.isTTY && !file) return cli.showHelp();
+
+const stream = file ? fs.createReadStream(file) : process.stdin;
+stream.pipe(concat(convert));
 
 function convert(data) {
-    csv2geojson.csv2geojson(data.toString(), {
-        latfield: argv.lat,
-        lonfield: argv.lon,
-        delimiter: argv.delimiter,
-        numericFields: argv['numeric-fields']
-    }, function(err, data) {
-        if (err) console.error(JSON.stringify(err, null, 2));
-        if (argv.line) data = csv2geojson.toLine(data)
-        console.log(JSON.stringify(data, null, 2));
-    });
+    csv2geojson.csv2geojson(
+        data.toString(),
+        {latfield: lat, lonfield: lon, delimiter, numericFields},
+        function (err, data) {
+            if (err) console.error(JSON.stringify(err, null, 2));
+            if (line) data = csv2geojson.toLine(data);
+            console.log(JSON.stringify(data, null, 2));
+        }
+    );
 }

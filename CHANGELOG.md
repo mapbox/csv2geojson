@@ -1,3 +1,7 @@
+## 5.1.2
+
+* Replace deprecated `optimist` with `meow`
+
 ## 5.1.1
 
 * Fix bug in `--numeric-fields` option
