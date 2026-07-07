@@ -80,6 +80,8 @@ function csv2geojson(x, options, callback) {
     }
 
     options.delimiter = options.delimiter || ',';
+    options.parseLatLon = options.parseLatLon || parseFloat;
+    options.sexagesimal = options.sexagesimal !== false;
 
     var latfield = options.latfield || '',
         lonfield = options.lonfield || '',
@@ -128,6 +130,7 @@ function csv2geojson(x, options, callback) {
 
     if (!latfield) latfield = guessLatHeader(parsed[0]);
     if (!lonfield) lonfield = guessLonHeader(parsed[0]);
+
     var noGeometry = (!latfield || !lonfield);
 
     if (noGeometry) {
@@ -151,13 +154,15 @@ function csv2geojson(x, options, callback) {
                 lonf, latf,
                 a;
 
-            a = sexagesimal(lonk, 'EW');
-            if (a) lonk = a;
-            a = sexagesimal(latk, 'NS');
-            if (a) latk = a;
+            if (options.sexagesimal) {
+                a = sexagesimal(lonk, 'EW');
+                if (a) lonk = a;
+                a = sexagesimal(latk, 'NS');
+                if (a) latk = a;
+            }
 
-            lonf = parseFloat(lonk);
-            latf = parseFloat(latk);
+            lonf = options.parseLatLon(lonk);
+            latf = options.parseLatLon(latk);
 
             if (isNaN(lonf) ||
                 isNaN(latf)) {
@@ -178,8 +183,8 @@ function csv2geojson(x, options, callback) {
                     geometry: {
                         type: 'Point',
                         coordinates: [
-                            parseFloat(lonf),
-                            parseFloat(latf)
+                            lonf,
+                            latf
                         ]
                     }
                 });

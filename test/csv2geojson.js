@@ -258,5 +258,26 @@ describe('csv2geojson', function () {
                 expect(data).to.eql(jsonFile('geometry_null.geojson'));
             });
         });
+
+        it('allow custom parseLatLng function', function (done) {
+            csv2geojson.csv2geojson('Lat;Long;name\n1,234;2,345;foobar', {
+                delimiter: ';',
+                sexagesimal: false,
+                parseLatLon: (raw) => parseFloat(raw.replace(',', '.')),
+            }, function (err, data) {
+                expect(data).to.eql({
+                    type: 'FeatureCollection',
+                    features: [{
+                        type: 'Feature',
+                        properties: {name: 'foobar'},
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [2.345, 1.234]
+                        }
+                    }]
+                });
+                done();
+            });
+        });
     });
 });
